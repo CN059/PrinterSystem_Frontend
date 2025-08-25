@@ -1,11 +1,12 @@
-<script setup lang="ts"></script>
+<script setup lang="ts">
+// 这里不需要引入任何组件，Vite 会自动解析
+</script>
 
 <template>
-  <h1>You did it!</h1>
-  <p>
-    Visit <a href="https://vuejs.org/" target="_blank" rel="noopener">vuejs.org</a> to read the
-    documentation
-  </p>
+  <!-- 路由会根据路径渲染对应的布局组件（DefaultLayout 或 AuthLayout） -->
+  <router-view />
 </template>
 
-<style scoped></style>
+<style scoped>
+/* 全局可选样式 */
+</style>
