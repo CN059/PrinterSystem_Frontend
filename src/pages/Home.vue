@@ -16,6 +16,7 @@
 import { computed } from "vue";
 import { getToken } from "@/utils/storage";
 import { FileUpload } from "@/components/file";
+import { logout } from "@/utils/logout";
 
 const isLoggedIn = computed(() => !!getToken());
 // ✅ 必须定义事件处理函数（即使目前只做打印）

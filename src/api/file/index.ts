@@ -1,6 +1,5 @@
 // src/api/file/index.ts
 import apiClient from '@/api/client';
-import type { ApiResponse } from '@/api/types';
 
 // 请求类型
 import type {
@@ -19,29 +18,30 @@ import type { GetDocumentListResponseData } from '@/api/file/response/DocumentLi
 import type { GetDocumentDetailResponseData } from '@/api/file/response/DocumentDetailResponse';
 import type { DeleteDocumentResponseData } from '@/api/file/response/DeleteResponse';
 
+// ✅ 返回的是 UploadFileResponseData 而不是 ApiResponse<...>
 export const uploadFile = (
   formData: FormData
-): Promise<ApiResponse<UploadFileResponseData>> => {
-  return apiClient.post("/file/upload", formData);
+): Promise<UploadFileResponseData> => {
+  return apiClient.post('/file/upload', formData);
+  // 拦截器已剥壳，返回的就是 data 字段
 };
 
-
-export const getDocumentList = async (
+export const getDocumentList = (
   payload: GetDocumentListRequest
-): Promise<ApiResponse<GetDocumentListResponseData>> => {
-  return await apiClient.post('/file/list', payload);
+): Promise<GetDocumentListResponseData> => {
+  return apiClient.post('/file/list', payload);
 };
 
-export const getDocumentDetail = async (
+export const getDocumentDetail = (
   payload: GetDocumentDetailRequest
-): Promise<ApiResponse<GetDocumentDetailResponseData>> => {
-  return await apiClient.post('/file/detail', payload);
+): Promise<GetDocumentDetailResponseData> => {
+  return apiClient.post('/file/detail', payload);
 };
 
-export const deleteDocument = async (
+export const deleteDocument = (
   payload: DeleteDocumentRequest
-): Promise<ApiResponse<DeleteDocumentResponseData>> => {
-  return await apiClient.post('/file/delete', payload);
+): Promise<DeleteDocumentResponseData> => {
+  return apiClient.post('/file/delete', payload);
 };
 
 export default {
