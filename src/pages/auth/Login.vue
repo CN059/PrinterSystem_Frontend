@@ -132,7 +132,7 @@
 <script setup lang="ts">
 import { ref, reactive } from "vue";
 import { useRouter } from "vue-router";
-import { userApi } from "@/api";
+import { userApi } from "@/api/user";
 import { setToken } from "@/utils/storage";
 
 const router = useRouter();

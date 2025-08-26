@@ -1,7 +1,7 @@
 // src/api/client.ts
 import axios from 'axios';
 import type { AxiosInstance } from 'axios';
-import type { ApiResponse } from '@/types/common';
+import type { ApiResponse } from '@/api/types';
 import { getToken, removeToken } from '@/utils/storage';
 import { useRouter } from 'vue-router';
 
@@ -41,31 +41,26 @@ api.interceptors.request.use(
 );
 
 // 响应拦截器
+// 响应拦截器：保持返回 response，但挂载解包后的数据
 api.interceptors.response.use(
   (response) => {
-    const data: ApiResponse = response.data;
+    const apiData: ApiResponse = response.data;
 
-    // 检查响应格式是否符合统一结构
-    if (typeof data.ifSuccess === 'undefined') {
-      console.error('⚠️ API 响应格式不符合规范，缺少 ifSuccess 字段');
-      // ❌ 严重警告：放弃响应处理
+    if (typeof apiData.ifSuccess === 'undefined') {
       return Promise.reject(new Error('API 响应格式错误'));
     }
 
-    // 业务逻辑错误（如登录失败、订单不存在）
-    if (!data.ifSuccess) {
-      console.error('❌ 业务错误：', data.response);
-      // 可以统一提示
-      // ElMessage.error(data.response);
-      return Promise.reject(new Error(data.response || '请求失败'));
+    if (!apiData.ifSuccess) {
+      return Promise.reject(new Error(apiData.response || '请求失败'));
     }
 
-    // 成功直接返回 data 字段（payload）
-    return Promise.resolve(data.data);
+    // ✅ 关键：返回原始 response 对象，但把业务数据放到 response.data 上
+    response.data = apiData.data;
+    return response.data; // 类型正确：AxiosResponse
   },
   (error) => {
-    const response = error.response;
-    const request = error.request;
+    // 错误处理（401跳转等）
+    const { response, request } = error;
 
     if (response) {
       if (response.status === 401) {
@@ -83,5 +78,6 @@ api.interceptors.response.use(
     return Promise.reject(error);
   }
 );
+
 
 export default api;
