@@ -28,6 +28,11 @@ api.interceptors.request.use(
     if (token) {
       config.headers.Authorization = `Bearer ${token}`;
     }
+    if (config.data instanceof FormData) {
+      // 删除 Content-Type，浏览器会自动设置为 multipart/form-data + boundary
+      delete config.headers['Content-Type'];
+      // 或者：config.headers['Content-Type'] = undefined;
+    }
     return config;
   },
   (error) => {
